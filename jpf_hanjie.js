@@ -55,23 +55,27 @@
 */
 window.onload = init;
 
+var puzzleCells; //global variable that is not function scoped
+var cellBackground;
 
-function init(){
+function init(){ //lifecycle method
 
    document.getElementById("puzzleTitle").innerHTML = "Puzzle 1";
 
    document.getElementById("puzzle").innerHTML = 
    
    drawPuzzle(puzzle1Hint, puzzle1Rating, puzzle1);
-
-}
-
-var buttons = document.getElementsByClassName("puzzles");
-    
-for(var i = 0; i < buttons.length; i++){
    
-    buttons[i].onclick = swapPuzzle;
+   var buttons = document.getElementsByClassName("puzzles");
     
+   for(var i = 0; i < buttons.length; i++){
+   
+      buttons[i].onclick = swapPuzzle;
+    
+   }
+
+   setupPuzzle();
+
 }
 
 function swapPuzzle(e){
@@ -97,12 +101,41 @@ function swapPuzzle(e){
          drawPuzzle(puzzle3Hint, puzzle3Rating, puzzle3);
          break;
    }
+   
+   setupPuzzle();
+
 }
 
+function setupPuzzle(){
 
+   puzzleCells = document.querySelectorAll('table#hanjieGrid td');
 
+   for(var i = 0; i < puzzleCells.length; i++){
+      puzzleCells[i].style.backgroundColor = 'rgb(233, 207, 29)';
+      puzzleCells[i].onmousedown = setBackground;
+      puzzleCells[i].addEventListener('mouseenter', extendBackground);
+   }
 
+}
+
+function setBackground(e){
+   cellBackground = 'rgb(101, 101, 101)';
+   this.style.backgroundColor = cellBackground;
+   //e.target.style.backgroundColor = cellBackground;
+   
+   for(var i = 0; i < puzzleCells.length; i++){
+      puzzleCells[i].addEventListener('mouseenter', extendBackground);
+   }
+   
+}
+
+function extendBackground(e){
+   this.style.backgroundColor = cellBackground;
+}
          
+
+
+
 /* ================================================================= */
 
 function drawPuzzle(hint, rating, puzzle) {
